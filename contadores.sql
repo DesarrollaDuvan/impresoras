@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-08-2024 a las 05:20:16
+-- Tiempo de generación: 14-08-2024 a las 00:01:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -24,34 +24,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `impresoras`
+-- Estructura de tabla para la tabla `contadores`
 --
 
-CREATE TABLE `impresoras` (
+CREATE TABLE `contadores` (
   `id` int(11) NOT NULL,
-  `modelo` varchar(30) NOT NULL,
-  `regional` varchar(30) NOT NULL,
-  `ubicacion` varchar(30) NOT NULL,
-  `ip` int(11) NOT NULL,
-  `observaciones` varchar(50) NOT NULL
+  `fecha` date NOT NULL,
+  `contador-cl` int(11) NOT NULL,
+  `contador-bn` int(11) NOT NULL,
+  `diferencia-cl` int(11) NOT NULL,
+  `diferencia-bn` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `impresoras`
---
-
-INSERT INTO `impresoras` (`id`, `modelo`, `regional`, `ubicacion`, `ip`, `observaciones`) VALUES
-(0, 'Ricoh MP 4002', 'medellin', 'gs', 2344, 'dsfs');
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `impresoras`
---
-ALTER TABLE `impresoras`
-  ADD PRIMARY KEY (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
