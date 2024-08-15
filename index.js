@@ -42,6 +42,17 @@ app.get('/', (req, res) => {
     })
 })
 
+app.get('/contadores', (req, res) => {
+    conexion.query("SELECT * FROM impresoras", (err, resbd) => {
+        if(err){
+            console.log("error en consulta general de impresoras");
+            throw err;
+        }else{
+            res.render("contadores", {datos: resbd});
+        }
+    })
+})
+
 app.post('/agregar-imp', (req, res) => {
     const modelo = req.body.modelo;
     const regional = req.body.regional;
