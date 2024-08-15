@@ -16,7 +16,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Contador de Impresoras</a>
+        <a class="navbar-brand" href="/">Contador de Impresoras</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -31,7 +31,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#"
+              <a class="nav-link active" aria-current="page" href="/"
                 >Impresoras</a
               >
             </li>
@@ -39,7 +39,7 @@
               <a class="nav-link" href="/contadores">Contadores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Facturas</a>
+              <a class="nav-link" href="/facturas">Facturas</a>
             </li>
           </ul>
           <form class="d-flex">
@@ -57,6 +57,7 @@
       </div>
     </nav>
     <header>
+      <h2 class="mb-4 text-center">Agregar Impresora</h2>
       <div class="img-imp">
         <img
           src="https://www.ricoh.es/media/IM2500A504_tcm77-49907.png"
@@ -64,7 +65,7 @@
         />
       </div>
       <div class="container mt-5">
-        <h2 class="mb-4">Agregar Impresora</h2>
+        
         <form action="/agregar-imp" method="post">
           <div class="row mb-3">
             <div class="col-md-6">
