@@ -111,6 +111,23 @@ app.post("/contador", (req, res) => {
     }
   );
 });
+
+app.post("/cons-fact", (req, res) => {
+  const imp = req.body.impresora;
+  const fec = req.body.fecha;
+
+  conexion.query("SELECT * FROM contadores WHERE id = '" + imp + "'", (err, resp) => {
+    if (err) {
+      console.log("error en la consulta de facturas");
+      throw err;
+    }
+    else {
+      console.log("Esta es la respuesta del facturas ", resp);
+      res.redirect("/facturas");
+    }
+  })
+
+})
 //se establece el puerto por donde se va a ejecutar el proyecto
 const PORT = 3000;
 app.listen(PORT, console.log("El servidor esta corriendo Exitosamente"));
