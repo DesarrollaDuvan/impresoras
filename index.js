@@ -33,7 +33,6 @@ app.get("/", (req, res) => {
       console.log("error en la consulta de las impresoras");
       throw err;
     } else {
-      console.log(resbd);
       res.render("impresoras", { datos: resbd });
     }
   });
@@ -113,21 +112,92 @@ app.post("/contador", (req, res) => {
 });
 
 app.post("/cons-fact", (req, res) => {
-  const imp = req.body.impresora;
-  const fec = req.body.fecha;
+  console.log("esta consultando las facturas")
+  const { impresora, desde, hasta } = req.body;
 
-  conexion.query("SELECT * FROM contadores WHERE id = '" + imp + "'", (err, resp) => {
+  // Convierte las fechas a formato de MySQL
+  const fechaDesde = new Date(desde);
+  const fechaHasta = new Date(hasta);
+
+  // Realizar la consulta para obtener los contadores de la impresora en el rango de fechas
+  const cont = `
+    SELECT * FROM contadores
+    WHERE id = ? AND fecha BETWEEN ? AND ?
+    ORDER BY fecha ASC
+  `;
+
+  console.log(fechaDesde)
+  console.log(fechaHasta)
+
+
+  conexion.query(cont, [impresora, fechaDesde, fechaHasta], (err, rows) => {
     if (err) {
-      console.log("error en la consulta de facturas");
+      console.log("Error en la consulta de facturas");
       throw err;
     }
-    else {
-      console.log("Esta es la respuesta del facturas ", resp);
-      res.redirect("/facturas");
-    }
-  })
 
-})
+    // Si no hay resultados, mostrar un mensaje adecuado
+    if (rows.length === 0) {
+      return res.render("facturas", {
+        mensaje: "No se encontraron datos para este rango de fechas.",
+      });
+    }
+
+    // Calcular las copias realizadas en el rango de fechas
+    let copiasTotales = 0;
+    for (let i = 1; i < rows.length; i++) {
+      const contadorAnterior = rows[i - 1];
+      const contadorActual = rows[i];
+
+      // Restamos los contadores para obtener las copias realizadas
+      const copiasBN = contadorActual.contadorbn - contadorAnterior.contadorbn;
+      const copiasColor = contadorActual.contadorcl - contadorAnterior.contadorcl;
+
+      console.log(copiasBN)
+      console.log(copiasColor)
+
+      // Sumar las copias realizadas
+      copiasTotales += copiasBN + copiasColor;
+
+      const prec = `
+    SELECT * FROM impresoras
+    WHERE id = ?
+  `;
+
+      conexion.query(prec, [impresora], (err, resprec) => {
+        if (err) {
+          console.log("Error al consultar los precios de la impresora");
+          throw err;
+        }
+
+        // Verificar si la consulta devolvió algún resultado
+        if (resprec.length === 0) {
+          console.log("No se encontró la impresora con el id proporcionado");
+          return;
+        }
+
+
+        // Asegúrate de que los campos precio_bn y precio_color existan y sean números
+        const precioBN = resprec[0].precio_bn;
+        const precioCL = resprec[0].precio_color;
+
+        // Imprimir los resultados para comprobar
+        console.log("Precio de las impresoras BN: " + precioBN);
+        console.log("Precio de las impresoras COLOR: " + precioCL);
+
+      });
+    }
+    // Renderizar la página con los resultados
+    res.redirect("/facturas");
+    /* res.render("facturas", {
+      copiasTotales: copiasTotales,
+      impresoraId: impresora,
+      desde: desde,
+      hasta: hasta,
+    }); */
+  });
+});
+
 //se establece el puerto por donde se va a ejecutar el proyecto
 const PORT = 3000;
 app.listen(PORT, console.log("El servidor esta corriendo Exitosamente"));
